@@ -1,0 +1,150 @@
+# CMS-BOOT-001 — ACF Pro Environment Verification
+
+## Mission
+
+Perform a complete verification of the WordPress CMS environment before implementing the CMS architecture.
+
+Do NOT create any field groups yet.
+
+Do NOT modify any existing content.
+
+Do NOT register CPTs.
+
+This mission is verification only.
+
+---
+
+## Verify ACF Pro
+
+Confirm:
+
+- ACF Pro is installed.
+- Plugin is activated.
+- License is active.
+- Latest compatible version.
+- No activation issues.
+
+---
+
+## Verify ACF Features
+
+Confirm availability of:
+
+- Options Pages
+- Repeater Fields
+- Flexible Content
+- Clone Fields
+- Relationship Fields
+- Gallery Fields
+- Group Fields
+- Local JSON support
+
+---
+
+## Local JSON
+
+Verify:
+
+- Local JSON enabled.
+- Save path.
+- Load path.
+- Repository compatibility.
+
+Recommend whether Local JSON should become the canonical storage for Field Groups.
+
+---
+
+## Existing Content Audit
+
+Inspect the current website.
+
+Identify:
+
+- Existing Pages
+- Existing Posts
+- Existing Custom Post Types
+- Existing Taxonomies
+- Existing Menus
+- Existing Elementor Templates
+
+Return an inventory only.
+
+---
+
+## Elementor Audit
+
+Determine:
+
+- Elementor version.
+- Elementor Pro version.
+- Existing Theme Builder templates.
+- Dynamic Tag support.
+- Compatibility with ACF.
+
+---
+
+## Theme Audit
+
+Determine:
+
+- Active Theme.
+- Child Theme present?
+- Theme supports template overrides?
+- Existing custom PHP templates.
+
+---
+
+## Plugin Compatibility
+
+Identify plugins that may interact with:
+
+- ACF
+- Elementor
+- SEO
+- Caching
+- Forms
+
+Highlight any conflicts.
+
+---
+
+## Performance Baseline
+
+Record:
+
+- PHP Version
+- WordPress Version
+- Memory Limit
+- Upload Limit
+- Active Cache
+- Object Cache
+- OPcache
+
+---
+
+## Risks
+
+Identify anything that could affect CMS implementation.
+
+---
+
+## Recommendations
+
+Return a Go / No-Go decision.
+
+One of:
+
+GREEN
+Ready for CMS implementation
+
+YELLOW
+Minor issues
+
+RED
+Resolve blockers before proceeding
+
+---
+
+Do not implement anything.
+
+Return only the readiness report.
