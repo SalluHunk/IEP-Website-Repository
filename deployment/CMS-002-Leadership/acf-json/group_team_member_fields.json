@@ -1,0 +1,93 @@
+[
+  {
+    "key": "group_6874a2c000001",
+    "title": "Team Member Details",
+    "fields": [
+      {
+        "key": "field_6874a2c000010",
+        "label": "Job Title",
+        "name": "job_title",
+        "type": "text",
+        "instructions": "e.g. \"Director\", \"Mechanical Engineer\". Migrate directly from the live Leadership page (page 972) — see IMPLEMENTATION-GUIDE.md's migration table for all 7 real values.",
+        "required": 1
+      },
+      {
+        "key": "field_6874a2c000011",
+        "label": "Qualifications",
+        "name": "qualifications",
+        "type": "text",
+        "instructions": "Post-nominal letters and professional memberships as currently shown, e.g. \"BEng (Hons), MIET\" or \"CEng, FEI, FIET, FHEA, PhD, MEng, MRes, BEng\". Deliberately one field, not split into Qualifications/Credentials — see DECISIONS.md.",
+        "required": 0
+      },
+      {
+        "key": "field_6874a2c000012",
+        "label": "Biography",
+        "name": "biography",
+        "type": "wysiwyg",
+        "instructions": "Directors currently have a longer Expertise/Value paragraph; team members currently have a shorter one-line qualifications/focus summary. Both fit this one field as-is — migrate the exact live text, do not pad shorter bios to match the directors' length.",
+        "tabs": "visual",
+        "toolbar": "basic",
+        "media_upload": 0,
+        "required": 0
+      },
+      {
+        "key": "field_6874a2c000013",
+        "label": "Team Group",
+        "name": "team_group",
+        "type": "select",
+        "instructions": "Preserves the live page's two-section layout (\"Directors\" then \"The team\"). Not in the original mission's example field list — added because the shortcode needs it to render the same two-group structure the live page already has; see DECISIONS.md.",
+        "choices": {
+          "director": "Director",
+          "team": "Team"
+        },
+        "default_value": "team",
+        "required": 1,
+        "ui": 1
+      },
+      {
+        "key": "field_6874a2c000014",
+        "label": "Profile Image",
+        "name": "profile_image",
+        "type": "image",
+        "instructions": "Return format: ID. All 7 real photos are already uploaded to the Media Library — see migration table for each person's existing attachment ID (no new uploads needed).",
+        "return_format": "id",
+        "preview_size": "medium",
+        "required": 0
+      },
+      {
+        "key": "field_6874a2c000015",
+        "label": "Display Order",
+        "name": "display_order",
+        "type": "number",
+        "instructions": "Controls presentation order within each Team Group. Migrate using each person's current position on the live Leadership page (1–7, see migration table).",
+        "required": 0
+      },
+      {
+        "key": "field_6874a2c000016",
+        "label": "LinkedIn URL",
+        "name": "linkedin_url",
+        "type": "url",
+        "instructions": "No LinkedIn URLs exist anywhere in the current live content for any of the 7 people — CRN-001 lists \"LinkedIn integration approach\" as an explicitly open, unresolved decision. Leave blank for all real records; do not invent or guess profile URLs.",
+        "required": 0
+      }
+    ],
+    "location": [
+      [
+        {
+          "param": "post_type",
+          "operator": "==",
+          "value": "cspt-team-member"
+        }
+      ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "field",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "CMS-002 deployment package — field model for the existing cspt-team-member CPT. Deliberately excludes Featured Flag and Areas of Expertise (no verified live content or target taxonomy justifies them — all 7 people are shown, none marked as \"featured\"; expertise areas are already captured inline in Qualifications/Biography) and does not split Qualifications from Credentials (the live content mixes academic and professional-membership letters in one string per person, with no clean existing split to migrate from). See DECISIONS.md.",
+    "show_in_rest": 1
+  }
+]

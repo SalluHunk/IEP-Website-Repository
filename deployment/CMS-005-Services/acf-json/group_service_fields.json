@@ -1,0 +1,122 @@
+[
+  {
+    "key": "group_6870b1f000001",
+    "title": "Service Details",
+    "fields": [
+      {
+        "key": "field_6870b1f000010",
+        "label": "Executive Summary",
+        "name": "executive_summary",
+        "type": "text",
+        "instructions": "Short 1–2 line summary for cards/listings. See IMPLEMENTATION-GUIDE.md's migration table — as of the v1.1 catalogue (2026-07-13), none of the 9 approved service titles have sourced copy yet; leave blank rather than inventing summary text.",
+        "required": 0,
+        "maxlength": 200
+      },
+      {
+        "key": "field_6870b1f000011",
+        "label": "Full Description",
+        "name": "full_description",
+        "type": "wysiwyg",
+        "instructions": "Longer-form content for a future single-service page. No current live content covers this depth — starts empty per each service, to be authored, not migrated. Do not pre-fill with invented copy.",
+        "required": 0,
+        "tabs": "visual",
+        "toolbar": "basic",
+        "media_upload": 0
+      },
+      {
+        "key": "field_6870b1f000012",
+        "label": "Key Benefits",
+        "name": "key_benefits",
+        "type": "repeater",
+        "instructions": "One row per benefit phrase. ACF Pro Repeater — real Repeater field, not the free-ACF fixed-Text-field workaround the original CMS spec used, since ACF Pro is confirmed active (CMS-BOOT-001). Migration: split each service's existing short description on its separator (· or , depending on the item — see migration table) into one row per phrase.",
+        "layout": "table",
+        "button_label": "Add Benefit",
+        "sub_fields": [
+          {
+            "key": "field_6870b1f000013",
+            "label": "Benefit",
+            "name": "benefit_text",
+            "type": "text",
+            "required": 1
+          }
+        ]
+      },
+      {
+        "key": "field_6870b1f000020",
+        "label": "Related Case Studies",
+        "name": "related_case_studies",
+        "type": "relationship",
+        "instructions": "Relates to Portfolio (cspt-portfolio) items — the CPT CMS-001 designated as the Case Studies vehicle. This CPT already exists, so this field is configurable today, unlike Industry/Technology fields (see DECISIONS.md). Will show no usable results until cspt-portfolio's demo content is replaced with real case studies — that's the Case Studies module's job, not this one.",
+        "post_type": [
+          "cspt-portfolio"
+        ],
+        "filters": [
+          "search"
+        ],
+        "return_format": "id",
+        "min": 0,
+        "max": 0
+      },
+      {
+        "key": "field_6870b1f000030",
+        "label": "CTA Text",
+        "name": "cta_text",
+        "type": "text",
+        "instructions": "Per-service CTA override. If left blank, templates should fall back to CMS-003's Global Settings Primary CTA text (“Book Opportunity Screening”) rather than showing nothing — see php/service-helper-functions.php.",
+        "required": 0
+      },
+      {
+        "key": "field_6870b1f000031",
+        "label": "CTA Link",
+        "name": "cta_link",
+        "type": "url",
+        "instructions": "Same fallback behaviour as CTA Text — falls back to CMS-003's Global Settings Primary CTA URL if blank.",
+        "required": 0
+      },
+      {
+        "key": "field_6870b1f000040",
+        "label": "Display Order",
+        "name": "display_order",
+        "type": "number",
+        "instructions": "Controls presentation order. Migrate using each service's current position on the live Services page (1–7, see migration table).",
+        "required": 0
+      },
+      {
+        "key": "field_6870b1f000041",
+        "label": "Featured Service",
+        "name": "featured_service",
+        "type": "true_false",
+        "instructions": "As of the v1.1 catalogue (2026-07-13, 9 services), the client's approved list states no primary/secondary distinction — leave FALSE (default) for all services until the client explicitly specifies one. Do not infer a split from field ordering or category alone. See DECISIONS.md's v1.1 addendum.",
+        "default_value": 0,
+        "ui": 1
+      },
+      {
+        "key": "field_6870b1f000050",
+        "label": "SEO Summary",
+        "name": "seo_summary",
+        "type": "textarea",
+        "instructions": "Meta-description-style summary. No SEO plugin is currently active on the site (confirmed in CMS-BOOT-002) so this field is defined for forward compatibility but has no consumer yet — leave blank until one exists rather than guessing at SEO copy.",
+        "rows": 2,
+        "required": 0
+      }
+    ],
+    "location": [
+      [
+        {
+          "param": "post_type",
+          "operator": "==",
+          "value": "cspt-service"
+        }
+      ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "field",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "CMS-005 deployment package — field model for the existing cspt-service CPT. Deliberately excludes Featured Image (native WP thumbnail support already exists on this CPT), Industry Applications and Technology Stack (target taxonomy/CPT don't exist yet — see DECISIONS.md), Core Capabilities, Deliverables, and Gallery (no verified live content justifies them yet).",
+    "show_in_rest": 0
+  }
+]

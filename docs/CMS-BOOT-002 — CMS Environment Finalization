@@ -1,0 +1,167 @@
+# CMS-BOOT-002 — CMS Environment Finalization
+
+## Mission
+
+Resolve the remaining implementation ambiguities before CMS development begins.
+
+Do NOT create or modify content.
+
+Do NOT create Field Groups.
+
+Do NOT register CPTs.
+
+Verification and architectural confirmation only.
+
+---
+
+## 1. ACF License
+
+Verify manually:
+
+- License activated
+- Updates enabled
+- No activation warnings
+
+---
+
+## 2. Local JSON
+
+Verify:
+
+- acf-json folder exists
+
+If missing:
+
+Recommend creating
+
+/wp-content/themes/<child-theme>/acf-json/
+
+Confirm save path.
+
+Confirm load path.
+
+---
+
+## 3. Header Architecture
+
+Determine the canonical source.
+
+Examples:
+
+Theme
+
+Custom PHP
+
+Elementor
+
+Widget Area
+
+Custom Plugin
+
+Record which mechanism is authoritative.
+
+---
+
+## 4. Footer Architecture
+
+Determine:
+
+Where footer navigation originates.
+
+Which template controls it.
+
+Whether duplicate footer builders can safely be removed.
+
+Do NOT delete anything.
+
+Only identify.
+
+---
+
+## 5. Elementor Strategy
+
+Record the official implementation strategy.
+
+Confirm:
+
+Elementor FREE is the approved page builder.
+
+Elementor Pro will NOT be required.
+
+Dynamic functionality will instead use:
+
+- ACF Pro
+- WordPress template hierarchy
+- PHP template overrides
+- Shortcodes where appropriate
+
+Document this as the canonical implementation approach.
+
+---
+
+## 6. Existing Content Types
+
+Audit:
+
+Service
+
+Portfolio
+
+Team Member
+
+Determine:
+
+- existing fields
+- content quality
+- compatibility with CMS specification
+
+Identify gaps only.
+
+Do NOT modify.
+
+---
+
+## 7. Existing Templates
+
+Audit:
+
+- Page Templates
+- Elementor Templates
+- Theme Templates
+- PHP Templates
+
+Map each template to the page(s) it controls.
+
+---
+
+## 8. Repository Decision
+
+Create one implementation note:
+
+CMS Implementation Strategy
+
+Record:
+
+Elementor Free + ACF Pro is the official technology stack.
+
+Repository-first implementation remains the governing methodology.
+
+Future implementation shall extend existing assets before creating new ones.
+
+---
+
+## Deliverable
+
+Return:
+
+- Final CMS readiness report
+
+- Canonical implementation strategy
+
+- Gap analysis
+
+- GO / NO GO recommendation
+
+Stop.
+
+Do not begin CMS implementation.

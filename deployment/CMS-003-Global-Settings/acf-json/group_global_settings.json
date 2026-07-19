@@ -1,0 +1,231 @@
+[
+  {
+    "key": "group_6870a1e000001",
+    "title": "Global Settings",
+    "fields": [
+      {
+        "key": "field_6870a1e000000",
+        "label": "Company Information",
+        "name": "",
+        "type": "tab",
+        "placement": "top",
+        "endpoint": 0
+      },
+      {
+        "key": "field_6870a1e000010",
+        "label": "Company Name",
+        "name": "company_name",
+        "type": "text",
+        "instructions": "Legal/trading name as it appears site-wide. Verified from live site settings (wp_get_site_settings).",
+        "required": 1,
+        "default_value": "Industrial Energy Pioneers Limited"
+      },
+      {
+        "key": "field_6870a1e000011",
+        "label": "Company Tagline",
+        "name": "company_tagline",
+        "type": "text",
+        "instructions": "Verified from live site tagline (wp_get_site_settings).",
+        "required": 0,
+        "default_value": "Cut Waste. Improve Profit. Fund the future"
+      },
+      {
+        "key": "field_6870a1e000012",
+        "label": "Company Registration Number",
+        "name": "company_registration_number",
+        "type": "text",
+        "instructions": "NOT YET SOURCED. The live footer currently states only “Registered in England” with no number. Do not populate with a placeholder or invented value — leave blank until the real registration number is confirmed by the client.",
+        "required": 0,
+        "default_value": ""
+      },
+      {
+        "key": "field_6870a1e000019",
+        "label": "Contact Information",
+        "name": "",
+        "type": "tab",
+        "placement": "top",
+        "endpoint": 0
+      },
+      {
+        "key": "field_6870a1e000020",
+        "label": "Office Address",
+        "name": "office_address",
+        "type": "textarea",
+        "instructions": "Verified from the live footer (Services, Leadership, Case Studies pages).",
+        "rows": 3,
+        "default_value": "Suite 21 Sutherland House, London SE18 4PS"
+      },
+      {
+        "key": "field_6870a1e000021",
+        "label": "Contact Email",
+        "name": "contact_email",
+        "type": "email",
+        "instructions": "Verified: this is the email currently live in the site footer. Note it differs from the wp-admin account email (tjgriffiths@gmail.com) — confirm with the client whether a general company inbox (e.g. info@iep.technology) should replace this personal address before go-live.",
+        "default_value": "tim.griffiths@iep.technology"
+      },
+      {
+        "key": "field_6870a1e000022",
+        "label": "Contact Telephone",
+        "name": "contact_telephone",
+        "type": "text",
+        "instructions": "Verified: this is the number currently live in the site footer (a director's personal mobile, per the Leadership page). Confirm with the client whether a general company line should replace it.",
+        "default_value": "07900 537219"
+      },
+      {
+        "key": "field_6870a1e000023",
+        "label": "LinkedIn URL",
+        "name": "linkedin_url",
+        "type": "url",
+        "instructions": "PLACEHOLDER — the live footer currently links to the generic https://www.linkedin.com/, not a company page. CRN-001 lists “LinkedIn integration approach” as an open, unresolved decision. Do not treat this default as final.",
+        "default_value": "https://www.linkedin.com/"
+      },
+      {
+        "key": "field_6870a1e000029",
+        "label": "Branding Assets",
+        "name": "",
+        "type": "tab",
+        "placement": "top",
+        "endpoint": 0
+      },
+      {
+        "key": "field_6870a1e000030",
+        "label": "Primary Logo",
+        "name": "primary_logo",
+        "type": "image",
+        "instructions": "The site's current logo is already uploaded as media ID 211 (site_logo, per wp_get_site_settings) — select the existing library item rather than re-uploading.",
+        "return_format": "array",
+        "preview_size": "medium",
+        "library": "all"
+      },
+      {
+        "key": "field_6870a1e000031",
+        "label": "White / Reversed Logo",
+        "name": "white_logo",
+        "type": "image",
+        "instructions": "Already uploaded as media ID 1066 (iep-logo-white-nobg.png) — used today in the dark-background footer sections on Services/Leadership/Case Studies. Select the existing library item.",
+        "return_format": "array",
+        "preview_size": "medium",
+        "library": "all"
+      },
+      {
+        "key": "field_6870a1e000032",
+        "label": "Favicon",
+        "name": "favicon",
+        "type": "image",
+        "instructions": "Already uploaded as media ID 1030 (site_icon, per wp_get_site_settings) — select the existing library item.",
+        "return_format": "array",
+        "preview_size": "thumbnail",
+        "library": "all"
+      },
+      {
+        "key": "field_6870a1e000033",
+        "label": "Default Social Share Image",
+        "name": "default_social_image",
+        "type": "image",
+        "instructions": "NOT YET SOURCED — no default Open Graph/social share image was identified anywhere in the verified site inventory. Needs a real asset from the client before use.",
+        "return_format": "array",
+        "preview_size": "medium",
+        "library": "all"
+      },
+      {
+        "key": "field_6870a1e000039",
+        "label": "Calls to Action",
+        "name": "",
+        "type": "tab",
+        "placement": "top",
+        "endpoint": 0
+      },
+      {
+        "key": "field_6870a1e000040",
+        "label": "Primary CTA Text",
+        "name": "primary_cta_text",
+        "type": "text",
+        "instructions": "Verified: live on Services, Leadership and Case Studies pages today.",
+        "default_value": "Book Opportunity Screening"
+      },
+      {
+        "key": "field_6870a1e000041",
+        "label": "Primary CTA URL",
+        "name": "primary_cta_url",
+        "type": "url",
+        "default_value": "https://iep.technology/contact/"
+      },
+      {
+        "key": "field_6870a1e000042",
+        "label": "Secondary CTA Text",
+        "name": "secondary_cta_text",
+        "type": "text",
+        "instructions": "Verified: live alongside the Primary CTA on the same pages today.",
+        "default_value": "Contact us"
+      },
+      {
+        "key": "field_6870a1e000043",
+        "label": "Secondary CTA URL",
+        "name": "secondary_cta_url",
+        "type": "url",
+        "default_value": "https://iep.technology/contact/"
+      },
+      {
+        "key": "field_6870a1e000044",
+        "label": "Global CTA Text",
+        "name": "global_cta_text",
+        "type": "text",
+        "instructions": "NOT YET SOURCED. Intended as a fallback CTA label for templates/modules that don't specify their own Primary/Secondary CTA text. No distinct real value exists on the live site today — leave blank until an editorial decision is made; do not fill with invented marketing copy.",
+        "default_value": ""
+      },
+      {
+        "key": "field_6870a1e000049",
+        "label": "Footer Content",
+        "name": "",
+        "type": "tab",
+        "placement": "top",
+        "endpoint": 0
+      },
+      {
+        "key": "field_6870a1e000050",
+        "label": "Footer Copyright Text",
+        "name": "footer_copyright_text",
+        "type": "text",
+        "instructions": "Verified: live in the footer of every 2026-redesign page today.",
+        "default_value": "© Industrial Energy Pioneers Limited. All rights reserved. · Registered in England · iep.technology"
+      },
+      {
+        "key": "field_6870a1e000051",
+        "label": "Footer Legal Text",
+        "name": "footer_legal_text",
+        "type": "textarea",
+        "instructions": "NOT YET SOURCED as free text. The live footer today links to Privacy Policy, Terms & Conditions, Cookie Policy, Careers and Resources as page links, not as a single text blob — that link structure is a footer-navigation/relationship concern for the CMS-001 footer-consolidation module, not this field. This field is reserved for an additional short legal/disclaimer sentence only if the business decides one is needed. Leave blank otherwise.",
+        "rows": 2,
+        "default_value": ""
+      },
+      {
+        "key": "field_6870a1e000052",
+        "label": "Newsletter Text",
+        "name": "newsletter_text",
+        "type": "textarea",
+        "instructions": "NOT YET SOURCED. CRN-001 records “Newsletter implementation” as an open, unresolved decision. MC4WP is installed and active as the site's newsletter mechanism, but no approved newsletter sign-up copy exists yet. Leave blank — do not invent marketing copy for this field.",
+        "rows": 3,
+        "default_value": "",
+        "conditional_logic": 0
+      }
+    ],
+    "location": [
+      [
+        {
+          "param": "options_page",
+          "operator": "==",
+          "value": "global-settings"
+        }
+      ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "Global Settings for Industrial Energy Pioneers Limited — CMS-003 deployment package. Field values below are the verified real values already live on iep.technology at the time this package was generated (2026-07-12), except where explicitly marked NOT YET SOURCED or PLACEHOLDER in the field instructions.",
+    "show_in_rest": 0
+  }
+]

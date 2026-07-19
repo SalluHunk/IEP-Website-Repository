@@ -1,0 +1,81 @@
+[
+  {
+    "key": "group_iep_testimonial_v1",
+    "title": "Testimonial Details",
+    "fields": [
+      {
+        "key": "field_iep_ts_quote",
+        "label": "Quote",
+        "name": "quote",
+        "type": "wysiwyg",
+        "instructions": "Full testimonial text, migrated verbatim from the live Testimonials page (1062). Multi-paragraph quotes are kept as separate paragraphs, not condensed.",
+        "tabs": "visual",
+        "toolbar": "basic",
+        "media_upload": 0,
+        "required": 1
+      },
+      {
+        "key": "field_iep_ts_company_logo",
+        "label": "Company Logo",
+        "name": "company_logo",
+        "type": "image",
+        "instructions": "Return format: ID. All 4 real logos are already uploaded to the Media Library — see migration table for existing attachment IDs (no new uploads needed).",
+        "return_format": "id",
+        "preview_size": "medium",
+        "required": 0
+      },
+      {
+        "key": "field_iep_ts_person_name",
+        "label": "Person Name",
+        "name": "person_name",
+        "type": "text",
+        "instructions": "The individual who gave the testimonial, e.g. \"Shailesh Divani\".",
+        "required": 1
+      },
+      {
+        "key": "field_iep_ts_person_role",
+        "label": "Person Role",
+        "name": "person_role",
+        "type": "text",
+        "instructions": "Job title only, e.g. \"Director\" — company name is the post title, not repeated here. Migrate from the live page's \"{role} · {company}\" format, splitting at the middle dot.",
+        "required": 0
+      },
+      {
+        "key": "field_iep_ts_person_photo",
+        "label": "Person Photo",
+        "name": "person_photo",
+        "type": "image",
+        "instructions": "Return format: ID. Optional — only 1 of the 4 real testimonials (Kim Beighton, Harsco Environmental) has a real photo live; the other 3 show a 2-letter initials avatar instead. Leave blank for those 3 rather than inventing or guessing a photo — [iep_testimonial_grid] falls back to rendering initials automatically when this field is empty, exactly matching current live behaviour.",
+        "return_format": "id",
+        "preview_size": "thumbnail",
+        "required": 0
+      },
+      {
+        "key": "field_iep_ts_display_order",
+        "label": "Display Order",
+        "name": "display_order",
+        "type": "number",
+        "instructions": "Controls presentation order in [iep_testimonial_grid]. Migrate using each testimonial's current position on the live page (1–4, see migration table).",
+        "required": 0
+      }
+    ],
+    "location": [
+      [
+        {
+          "param": "post_type",
+          "operator": "==",
+          "value": "cspt-testimonial"
+        }
+      ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "field",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "CMS-008 deployment package — field model for cspt-testimonial (the site's own admin sidebar already showed a \"Testimonials\" menu item before this package was built, confirming this CPT exists; the Code Snippet auto-detects and retrofits it if so, or registers it fresh if not — see DECISIONS.md). Post title = company name (matches Case Studies' and Portfolio's precedent of using post title for the primary real-world identifier). No individual detail pages — Mission Control's explicit choice, grid/wall display only.",
+    "show_in_rest": 1
+  }
+]

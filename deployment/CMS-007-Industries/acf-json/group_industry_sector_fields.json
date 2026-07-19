@@ -1,0 +1,65 @@
+[
+  {
+    "key": "group_iep_industry_sector_v1",
+    "title": "Industry Sector Details",
+    "fields": [
+      {
+        "key": "field_iep_is_icon",
+        "label": "Icon",
+        "name": "icon",
+        "type": "icon_picker",
+        "instructions": "Font Awesome 5 Solid icon. IMPORTANT: this site's Elementor bundle is Font Awesome 5.15.3, not 6 — icon names that only exist in FA6 (e.g. fa-droplet, fa-magnifying-glass, fa-chart-simple) render blank. Verify any new icon by testing getComputedStyle(el, '::before').content on a live element before assuming a name is valid — do not guess from memory or current FA docs (this mistake was made twice already in WP-04 and while auditing this page).",
+        "return_format": "array",
+        "tabs": "font_awesome",
+        "library": "all",
+        "required": 0
+      },
+      {
+        "key": "field_iep_is_summary",
+        "label": "Summary",
+        "name": "summary",
+        "type": "textarea",
+        "instructions": "Short card-length description. Migrate verbatim from the live, already-approved Industries page (971) card copy — see IMPLEMENTATION-GUIDE.md's migration table.",
+        "rows": 2,
+        "required": 1
+      },
+      {
+        "key": "field_iep_is_overview",
+        "label": "Overview",
+        "name": "overview",
+        "type": "wysiwyg",
+        "instructions": "Longer detail-page narrative. Left blank at initial migration — no richer per-sector content exists in any reviewed source beyond the card-length Summary (checked: content briefing doc, brochure, live page). Do not fill with generic/templated filler; leave blank until real sector-specific copy is provided. See DECISIONS.md.",
+        "tabs": "visual",
+        "toolbar": "basic",
+        "media_upload": 0,
+        "required": 0
+      },
+      {
+        "key": "field_iep_is_display_order",
+        "label": "Display Order",
+        "name": "display_order",
+        "type": "number",
+        "instructions": "Controls presentation order in [iep_industry_grid]. Migrate using each sector's current position on the live Industries page (1–8, see migration table).",
+        "required": 0
+      }
+    ],
+    "location": [
+      [
+        {
+          "param": "post_type",
+          "operator": "==",
+          "value": "cspt-industry-sector"
+        }
+      ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "field",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "CMS-007 deployment package — field model for a brand-new cspt-industry-sector CPT (no pre-existing Greenly demo CPT covers Industries, confirmed by testing /industry/, /sector/, /sectors/ — all 404). Relationship fields to Services/Case Studies deliberately NOT included here — that cross-linking is WP-08's explicit scope per WCP-001-Progress-Register.md, once WP-04/05/06/07 content all exists to relate.",
+    "show_in_rest": 1
+  }
+]

@@ -1,0 +1,89 @@
+[
+  {
+    "key": "group_iep_case_study_v1",
+    "title": "Case Study Details",
+    "fields": [
+      {
+        "key": "field_iep_cs_icon",
+        "label": "Icon",
+        "name": "icon",
+        "type": "icon_picker",
+        "instructions": "Font Awesome 5 Solid icon, matching the live Case Studies page's own card icons (e.g. fas fa-industry, fas fa-beer-mug-empty, fas fa-recycle). Migrate the exact icon already used for each project on page 978 — see IMPLEMENTATION-GUIDE.md's migration table.",
+        "return_format": "array",
+        "tabs": "font_awesome",
+        "library": "all",
+        "required": 0
+      },
+      {
+        "key": "field_iep_cs_summary_snapshot",
+        "label": "Summary Snapshot",
+        "name": "summary_snapshot",
+        "type": "textarea",
+        "instructions": "Short card-length outcome line, e.g. \"≈£60,000/yr savings, ~48-month payback.\" Migrate verbatim from the live, already-approved card copy on page 978 — do not rephrase or re-derive figures.",
+        "rows": 2,
+        "required": 1
+      },
+      {
+        "key": "field_iep_cs_challenge",
+        "label": "Challenge",
+        "name": "challenge",
+        "type": "textarea",
+        "instructions": "1–2 sentence problem statement. Source: \"New Website Proposed Content AH ver2 2026 06 09.docx\", §2 (Primary Source, Verified) — migrate as written, do not embellish.",
+        "rows": 3,
+        "required": 0
+      },
+      {
+        "key": "field_iep_cs_solution",
+        "label": "Solution",
+        "name": "solution",
+        "type": "textarea",
+        "instructions": "1–2 sentence description of the engineering solution delivered. Same source as Challenge.",
+        "rows": 3,
+        "required": 0
+      },
+      {
+        "key": "field_iep_cs_results",
+        "label": "Results",
+        "name": "results",
+        "type": "textarea",
+        "instructions": "One result per line — rendered as a bullet list by [iep_case_study_single]. Plain textarea (not a repeater) to match this field group's existing simplicity convention (see team_member_fields.json). Same source as Challenge.",
+        "rows": 5,
+        "required": 0
+      },
+      {
+        "key": "field_iep_cs_commercial_impact",
+        "label": "Commercial Impact",
+        "name": "commercial_impact",
+        "type": "text",
+        "instructions": "The headline financial-outcome line shown on both the card and the single page, e.g. \"Potential annual benefit > €700,000\". Migrate verbatim from page 978 (the live figure is sometimes more refined than the 2026-06-09 content doc — e.g. Case Study 4's brick-manufacturer figure was an unresolved \"Quantify??\" in the doc but is £84,000/yr on the live page; the live page is the more current, approved source — use it, not the doc, whenever the two differ).",
+        "required": 0
+      },
+      {
+        "key": "field_iep_cs_display_order",
+        "label": "Display Order",
+        "name": "display_order",
+        "type": "number",
+        "instructions": "Controls presentation order in [iep_case_study_grid]. Migrate using each project's current position on the live Case Studies page (1–6, see migration table).",
+        "required": 0
+      }
+    ],
+    "location": [
+      [
+        {
+          "param": "post_type",
+          "operator": "==",
+          "value": "cspt-portfolio"
+        }
+      ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "field",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "CMS-006 deployment package — field model for the existing cspt-portfolio CPT (repurposed as Case Studies; no new CPT registered — see DECISIONS.md). Deliberately excludes Client and Address fields, both present in the Envato demo template: the repository's own Primary Source content document explicitly labels these \"ANONYMISED CASE STUDIES\" (client confidentiality by design, not an unresolved gap), and no real project has a client name or a physical address to migrate — inventing either would fabricate content this engagement's own evidence source deliberately withholds. Sector categorisation is handled via the portfolio-category taxonomy (repurposed, not a new field) — see php/case-study-helper-functions.php.",
+    "show_in_rest": 1
+  }
+]
