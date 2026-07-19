@@ -2,10 +2,10 @@
 id: WCP-001-PROGRESS-REGISTER
 title: WCP-001 — Website Completion Program — Progress Register
 purpose: Single persistent tracking document for Operation Horizon / WCP-001, updated after every completed Work Package
-status: Active
-version: 0.8.0
+status: Complete — all 11 Work Packages done, open items carried forward per each WP's own report
+version: 1.0.0
 owner: Engineering Corps (Claude) / Mission Control (user)
-last_updated: 2026-07-18
+last_updated: 2026-07-19
 ---
 
 # WCP-001 — Website Completion Program
@@ -15,7 +15,7 @@ last_updated: 2026-07-18
 ## Overall Progress
 
 ```
-██████████░░░░░░░░░░ 55%  (6 of 11 complete; Blocker A resolved to a proven, repeatable pattern)
+█████████████████████ 100%  (11 of 11 complete)
 ```
 
 | WP | Name | Status |
@@ -26,11 +26,11 @@ last_updated: 2026-07-18
 | 04 | Case Studies CMS | ✅ Deployed and populated — all 6 real case studies live in `cspt-portfolio`, DB-verified. 6 surplus demo posts moved to draft. Live-visual confirmation pending host cache purge. |
 | 05 | Industries CMS | ✅ Deployed and populated — all 8 real sectors live in `cspt-industry-sector`, DB-verified, detail pages confirmed live. |
 | 06 | Testimonials CMS | ✅ Deployed and populated — all 4 real testimonials live in `cspt-testimonial`, DB-verified. 1 surplus demo post moved to draft. `[iep_testimonial_grid]` shortcode ready but not yet visually spot-checked (grid-only, no individual pages to check against). |
-| 07 | Downloads / Resources CMS | ⏳ Pending — may not need a new CPT (native Media is REST-exposed) |
-| 08 | Technical Relationships | ⏳ Pending (depends on 03–07 content existing) |
-| 09 | Homepage Journey Validation | ⏳ Pending |
-| 10 | Website Validation | ⏳ Pending |
-| 11 | Repository Validation | ⏳ Pending |
+| 07 | Downloads / Resources CMS | ✅ Deployed and verified — `cspt-resource` REST-visible, smoke test (create/populate/verify/delete) passed end to end. Zero real content, by design (see WP-07 report). Icon fix DB-confirmed, pending host cache purge for live-visual. |
+| 08 | Technical Relationships | ✅ Deployed and fully verified — Services REST gap closed, all 3 relationship pairs populated and bidirectionally correct across all 23 relationship-bearing posts. Phantom-zero bug (found during verification) fixed, redeployed, and cleaned — `/relate/cleanup` confirmed idempotent (0 remaining issues on repeat call). |
+| 09 | Homepage Journey Validation | ✅ Validated — section order matches `PDC-A001`'s 12-stage model exactly, no broken links, no responsive overflow at 3 breakpoints. Leadership section confirmed CMS-driven (a stale deferred note corrected). 3 real findings surfaced, not silently fixed: Case Studies section still hardcoded (now actionable), Hero/Trust-Metrics duplication (still open from WP-01), no durable rollback backup exists for the 2026-07-14 restructure. |
+| 10 | Website Validation | ✅ Validated — zero broken links across all real pages, ~30 orphaned demo pages confirmed genuinely unlinked. 4 real findings surfaced: Industries/Leadership listing pages don't link to their own working detail pages, 13 junk demo blog posts remain published with no real Insights feature built, sitewide meta-description gap (only homepage has one), a stray generic LinkedIn link on Contact. CLAUDE.md's page count (30) and plugin list are stale — noted, not edited. |
+| 11 | Repository Validation | ✅ Validated — all 9 deployed CMS packages structurally consistent; POA-META-001's governance registry accurate. 2 real findings surfaced: two unrelated documents both claim `id: CMS-001` (a genuine numbering collision), and the root `README.md` is severely stale (still says "no content mission is active" despite 10 of 11 WPs now complete). Not edited — flagged for Mission Control. |
 
 ---
 
@@ -345,3 +345,252 @@ User reported the edit screen looked broken — dummy content, dummy featured im
 
 ### Next Work Package
 **WP-07 — Downloads/Resources CMS.** Per Blocker A's original scoping note, this one may not need a new CPT at all — WordPress's native Media (attachment) post type is already REST-exposed, so this could build on Posts/Pages + Media rather than a `cspt-*` type. Worth scoping that possibility explicitly before assuming a CPT is needed, same discovery-first discipline as every module so far.
+
+---
+
+## WP-07 — Downloads/Resources CMS — Execution Report (package phase, infrastructure only)
+
+### Executive Summary
+Checked, per WP-06's own note, whether this module needs a new CPT at all before assuming — it does, decided in `DECISIONS.md` (native Media lacks categorisation/gating/ordering without re-inventing most of a CPT anyway). But before any architecture work mattered, a bigger finding surfaced: **the live Resources page (984) already exists, is published, and is 100% "Coming soon" placeholder** — all 3 categories (Guides & whitepapers, Tools & calculators, Funding briefings) explicitly unpopulated, with the page's own copy stating downloads are gated behind a future Mailchimp (MC4WP) integration "when assets are ready." A full check of every governance-repository document and both live candidate pages (984, and the separate orphaned "Grants" page 648) confirmed: **no real client-provided Resources content exists anywhere in this engagement**, unlike WP-03–06 which all had real content already live to migrate. Flagged this to Mission Control directly as a genuine "missing client content" stop condition rather than fabricating guide/calculator/funding copy to fill a CPT. Mission Control chose **build infrastructure only** — package the CPT/ACF/endpoint/shortcode, populate zero real resources. Package built at `deployment/CMS-009-Resources/`. **Package phase only — nothing applied to WordPress yet, and unlike every prior module, there is no content-population step waiting behind deployment.**
+
+### Real finding: Resources page is orphaned from navigation
+`wp_list_menu_items` on the Main Menu (9 items: Home/About/Services/Industries/Case Studies/Leadership/Testimonials/Insights/Contact) confirmed Resources has no nav link — reachable only by direct URL. Noted in `DECISIONS.md`, not changed — adding it to the nav while the page offers nothing to download seemed actively counterproductive.
+
+### Real finding: a separate, stale, also-orphaned Grants page exists
+Found `648` ("Grants") while searching for Resources-adjacent content — real content about IETF grant funding (grants up to 70%, competitive basis, £186m available), but dated 2025-03, authored by a different user than this engagement's usual author, not linked in the main nav, and containing a stale application deadline (19 April 2024, already passed). A plausible future seed for the "Funding briefings" category, but publishing anything from it without the client confirming currency would risk shipping outdated funding information. Flagged in `DECISIONS.md`, deliberately not merged into this package.
+
+### 4th instance of the recurring FA5/FA6 icon bug — found and fixed live
+While checking whether the 3 existing category icons on page 984 were safe to reference, tested them live via `getComputedStyle(el, '::before')` (the proven diagnostic from CMS-005A/WP-04/WP-05) rather than trusting the class names: `fa-file-lines` and `fa-hand-holding-dollar` both returned `content: none` — invalid FA6-only names on this site's actual Font Awesome 5.15.3. `fa-calculator` was valid. Verified FA5-correct replacements empirically before applying (`fa-file-alt`, codepoint `f15c`; `fa-hand-holding-usd`, codepoint `f4c0`). Fixed directly on page 984's live `_elementor_data` via the same authenticated JSON-RPC script pattern documented in [[project_iep_website_repository]]'s EO-DESIGN-002A entry (bearer token from `.claude.json`, direct POST to `easy-mcp-ai/v1/mcp`) — needed here because the manual MCP tool path (`wp_replace_in_post`) only targets `post_content`/`post_excerpt`/`post_title`, not arbitrary postmeta like `_elementor_data`. Independently re-verified after push: JSON valid, element count unchanged (4), both broken classes gone, both replacements present, `_elementor_edit_mode` still `"builder"`. Live-visual confirmation pending the usual host cache purge.
+
+### Architecture decisions (full reasoning in `DECISIONS.md`)
+- **Fresh `cspt-resource` CPT**, not native Media — categorisation/gating/ordering would otherwise re-implement most of a CPT's capability on top of the Media Library anyway.
+- **Grid only, no individual detail pages** — decided directly this time (not asked, unlike WP-05/06) since a downloadable resource has no narrative content to justify a dedicated page.
+- **`gated` field ships as a flag only, no MC4WP enforcement built** — CRN-001 lists newsletter/email-capture implementation as an explicitly open decision; the shortcode renders gated resources without a working download link rather than leaking files or faking a gate.
+- **3 categories are fixed**, taken verbatim from page 984's existing "Coming soon" card copy — not invented.
+- **Adaptive CPT registration** (post_type_exists() check, retrofit-or-register, guarded flush_rewrite_rules()) — same proven pattern introduced in CMS-008, reused here even though a REST-only type listing already suggested a clean slate, since that check has a known blind spot for non-REST legacy types (CMS-006's own past wrong guess for Case Studies' CPT slug).
+
+### Package contents
+`deployment/CMS-009-Resources/`: README, IMPLEMENTATION-GUIDE (deployment steps + a single throwaway smoke-test record in place of a content migration table — none exists), VERIFICATION, ROLLBACK, DECISIONS (7 documented judgment calls, including 2 findings flagged but deliberately not acted on), CHANGELOG, repository-update.md, `acf-json/group_resource_fields.json` (5 fields: Category, File, Summary, Gated, Display Order), `php/resource-helper-functions.php` (adaptive CPT registration, authenticated `/iep-cms/v1/resource/{id}` endpoint + `/unpublish`, `[iep_resource_grid]` shortcode with gated-download suppression).
+
+### Repository Changes
+- New: `deployment/CMS-009-Resources/` (full package, 9 files).
+- Live fix (not packaged): page 984's `_elementor_data` — 2 broken icon classes corrected, independently re-verified.
+- This report added to `missions/WCP-001-Progress-Register.md`.
+
+### Commits
+- No git commit made yet this session — the repository's first-ever commit (`7266d07`) happened in the prior session; this session's changes remain uncommitted pending the user's usual batching call.
+
+### Outstanding Issues
+- **No real content exists to populate this module** — this is the actual outstanding item, not a bug or gap in this session's work. Deployment (Steps 1–4 of `IMPLEMENTATION-GUIDE.md`) can proceed independently of content ever arriving; population is a separate future pass whenever the client provides real guides/whitepapers/calculators/funding material.
+- Icon fix on page 984 pending host cache purge for live-visual confirmation, same mechanical dependency as every prior direct-DB push this engagement.
+- Grants page (648) content currency needs client confirmation before it could ever seed "Funding briefings" — not actioned.
+- Resources page's absence from main navigation not actioned — flagged for a future decision once real content exists.
+
+### Next Work Package
+**WP-08 — Technical Relationships** depends on WP-03–07 content existing; Resources will remain unlinked from that relationship-wiring work until real content exists here. Consider whether to proceed to WP-08 for the modules that do have real content (Leadership/Case Studies/Industries/Testimonials) while Resources stays content-empty, or to WP-09/10/11 (Homepage Journey/Website/Repository Validation) which have no CPT-content dependency at all — Mission Control's call.
+
+---
+
+## WP-08 — Technical Relationships — Execution Report (package phase)
+
+### Executive Summary
+Before designing anything, checked the real content shape across all four modules with live data (not the one-line mentions in this register). Two findings changed the scope from what a literal reading of "Technical Relationships" might suggest: (1) `cspt-service` has never been REST-visible on this site — the only content-bearing CPT that never got the standard retrofit, since CMS-005/CMS-005A's writes never needed REST — meaning two of three natural relationship pairs couldn't even be attempted without fixing that first; (2) a genuine confidentiality tension: Case Studies were anonymised at the client's explicit request (WP-04), and the real Testimonials' company names are plausibly inferable against specific Case Study titles by a reader, even without an explicit label. Surfaced both to Mission Control directly rather than guessing. Mission Control confirmed: exclude Testimonials from any relationship wiring, and build all three of the remaining pairs — Case Study↔Industry Sector, Case Study↔Service, Industry Sector↔Service. Package built at `deployment/CMS-010-Technical-Relationships/`. **Package phase only — nothing applied to WordPress yet.**
+
+### Real finding: Services REST gap, fixed as a bundled prerequisite
+`wp_get_post_types` confirmed `cspt-service` was completely absent from the REST-visible list, unlike Leadership/Case Studies/Industries/Testimonials/Resources which all received the standard retrofit in their own WPs. Root cause: CMS-005/CMS-005A were built and deployed entirely through direct `get_posts()`/`update_field()` calls inside a Code Snippet, which never required REST access, so the gap was never surfaced or closed. This package's Part 1 closes it the same proven way as every other module.
+
+### Real finding: Testimonial↔Case-Study linking risks undoing an intentional anonymisation
+Comparing the 4 real testimonials (Ultra Tough Ltd, York Handmade, Harsco Environmental, Naylor Industries Plc) against the 6 real case study titles (Plastic Packaging Manufacturer, Urban Brewery, Aluminium Recycling Plant, Specialist Brick Manufacturing, Brewer's Spent Grain, Net-Zero Brewery Design), some pairings read as plausibly inferable by a visitor even without any explicit label — and the case studies were anonymised specifically because the source content document is headed "ANONYMISED CASE STUDIES." Deliberately did not record or assert any specific pairing anywhere, even informally, since writing one down would itself be a step toward de-anonymising regardless of publication. Presented the yes/no question to Mission Control rather than deciding either way. **Mission Control confirmed: keep Testimonials and Case Studies unlinked.**
+
+### Relationship mapping — two pairs evidence-grounded, one flagged as editorial synthesis
+- **Case Study ↔ Industry Sector**: grounded in each case study's existing `cspt-portfolio-category` assignment (from WP-04) plus explicit title/content language where that adds a real second link (e.g. "Recycling Plant" → Waste & Circular Economy; "Circular Use" → Waste & Circular Economy). All 6 case studies mapped; Pharmaceuticals and FMCG Manufacturing correctly end up with zero linked case studies — no fabrication to force a match.
+- **Case Study ↔ Service**: each link traced to specific quoted text in that case study's own Challenge/Solution/Results content (e.g. "government funding secured" → Funding, Procurement & Project Delivery). Full quotes recorded in `DECISIONS.md`. Capped at 2 services per case study — conservative, not exhaustive.
+- **Industry Sector ↔ Service**: checked exhaustively — no source document in the repository maps this. Flagged directly to Mission Control as editorial synthesis rather than sourced fact before building it; Mission Control explicitly authorized proceeding anyway with that understood. Every reference to this table in the package's own copy (README, IMPLEMENTATION-GUIDE, the ACF field's own instructions text) states this plainly, not just in this register.
+
+### Technical implementation
+- 6 relationship fields (ACF `relationship` type, `return_format: id`) registered via `acf_add_local_field_group()` — same PHP-registration pattern CMS-005A used for "Service Icon," each in its own field group so nothing collides with CMS-002/005/006/007/008's existing groups.
+- Genuinely bidirectional sync (`iep_sync_relationship()`) — diffs the new value against the previous one on every write and applies both additions and removals to the reverse side, not just appends. Deliberately built this way from the start rather than accepting a simpler additive-only sync that would accumulate stale relationships after any future correction.
+- 3 authenticated `/iep-cms/v1/relate/...` endpoints (one per pair) plus a read endpoint and a minimal `/iep-cms/v1/service(s)` read path (Part 1's REST fix companion).
+- `[iep_related type="industries|services|case_studies"]` shortcode — generic across all 3 relationship types, not swapped into any live page.
+
+### Real finding, noted not fixed: stale demo meta still present on Case Study posts
+While reading full case study content for the mapping work, found each of the 6 posts still carries inert Envato demo postmeta from before WP-04 (`cspt-portfolio-details_client: "Envato Group, US"`, a matching fake address, a stray Lorem-Ipsum short description) — harmless since WP-04's `template_redirect` bypass means nothing ever reads or displays it, but never cleaned up. Out of scope for this package (unrelated to relationships); flagged in `DECISIONS.md` for a future cleanup pass.
+
+### Package contents
+`deployment/CMS-010-Technical-Relationships/`: README, IMPLEMENTATION-GUIDE (deployment steps + all 3 migration tables with real post IDs for Case Study↔Industry, title-based lookup instructions for the two Services-touching pairs since Service IDs aren't knowable until the REST fix is live), VERIFICATION, ROLLBACK, DECISIONS (8 documented judgment calls including full evidentiary quotes), CHANGELOG, repository-update.md, `php/relationship-helper-functions.php` (Services REST retrofit, 6 field registrations, 3 bidirectional-sync endpoints, `[iep_related]` shortcode). No `acf-json/` — fields are PHP-registered.
+
+### Repository Changes
+- New: `deployment/CMS-010-Technical-Relationships/` (full package, 7 files).
+- This report added to `missions/WCP-001-Progress-Register.md`.
+
+### Commits
+- No git commit made yet this session — remains uncommitted pending the user's usual batching call.
+
+### Outstanding Issues
+- Case Study↔Industry Sector can populate the moment the snippet is installed — no further dependency.
+- Case Study↔Service and Industry↔Service population requires looking up real Service post IDs via the newly-added `/iep-cms/v1/services` endpoint first (Step 5/6 of `IMPLEMENTATION-GUIDE.md`) — cannot be done until the snippet is live.
+- Industry Sector↔Service is editorial synthesis — worth a Mission Control review pass once it's populated, distinct in confidence level from the other two evidence-grounded pairs.
+- `[iep_related]` shortcode isn't placed on any live detail page yet — relationships will exist in data but won't be visible to a visitor until that placement decision is made (flagged for whoever scopes WP-09).
+- Stale Envato demo meta on the 6 Case Study posts, found but not fixed (see above).
+
+### Next Work Package
+**WP-09 — Homepage Journey Validation**, **WP-10 — Website Validation**, or **WP-11 — Repository Validation** all have no CPT-content dependency and could proceed regardless of WP-07/08's deployment status — Mission Control's call on ordering. Alternatively, deploy WP-07/WP-08's packages first via wp-admin so all of WP-03–08 reach a consistent "live" state before validation work begins.
+
+---
+
+## WP-07 + WP-08 — Deployment Verification (2026-07-19, same day)
+
+User deployed both packages via wp-admin. Verified independently rather than trusting the "installed" report at face value — one real bug found in the process.
+
+**WP-07 (Resources) — verified clean.** `cspt-resource` confirmed REST-visible (`resources-cpt`). Ran the Step 4 smoke test end to end: created a `TEST — delete me` record, populated all 5 fields via `/iep-cms/v1/resource/{id}` POST, independently re-fetched to confirm every value round-tripped correctly, then deleted it (trash, per the guide). `wp_list_cpt_items` confirms 0 published resources, as expected. The `fa-file-lines`/`fa-hand-holding-dollar` icon fix from the WP-07 report is confirmed correct in the database but **still shows the old broken icons live** — pending the same host cache purge every direct-DB push on this site has always needed, not a new issue.
+
+**WP-08 (Technical Relationships) — deployed, one real bug found and fixed in the package, redeployment pending.** `cspt-service` confirmed REST-visible (`services-cpt`, all 9 real services returned with correct titles/IDs). Populated all 3 relationship pairs using the real IDs discovered at verification time (full detail in `deployment/CMS-010-Technical-Relationships/CHANGELOG.md` v1.1). **Bug found via independent re-verification** (cache-busted requests, not trusting the write responses): `Services.related_case_studies` — one of the 3 pairs' 6 reverse-field directions — got a phantom leading `0` written into every array that received at least one relationship (5 of 9 services affected). Root cause: `get_field()` on this site returns `false` for a never-before-saved `relationship` field, and the original `(array) $val ?: array()` cast turns that into `array(false)` → `array(0)` after `intval()`, not an empty array. The other two reverse-field directions (`Industries.related_case_studies`, `Services.related_industries`) came out clean. Also correctly distinguished a separate, unrelated **caching artifact** during this same diagnostic pass — an un-busted repeat GET to `/relate/863` returned a stale cached `null` for fields that were actually already set correctly (confirmed via `x-gateway-cache-status: MISS` on the cache-busted retry) — flagged as a false alarm rather than conflated with the real bug.
+
+**Fix already written into the package** (`iep_normalize_ids()` helper + a new idempotent `/relate/cleanup` endpoint), **not yet redeployed** — the live site is still running the snippet that produced the 5 polluted records. Case Study↔Industry Sector and Case Study↔Service's *forward* fields, and Industry Sector↔Service entirely, are all confirmed correct and unaffected. **Outstanding**: paste the updated `php/relationship-helper-functions.php` into the existing Code Snippet, then call `POST /relate/cleanup` once to correct the 5 known-polluted records — full instructions in the package's `CHANGELOG.md` v1.1 entry.
+
+### Redeployment and final cleanup (same day, WP-08 now fully clean)
+
+User pasted the updated snippet — first attempt introduced a genuine PHP syntax error during the copy (`cspt-service` disappeared entirely from `wp_get_post_types`, confirming the whole snippet had gone inactive, consistent with Code Snippets' safe-mode auto-deactivation on a fatal error — plausibly smart-quote corruption during paste, given how many escaped apostrophes the file contains). User found and fixed the syntax error themselves; `cspt-service` reappeared in the REST-visible list, confirming the snippet was running again before calling `/relate/cleanup`, rather than assuming a paste had worked.
+
+`POST /relate/cleanup` cleaned exactly the 5 predicted records (876, 878, 879, 880, 881 — `Services.related_case_studies`) and nothing else: `[0, 863, 865, 866] → [863, 865, 866]`, `[0, 864, 867] → [864, 867]`, `[0, 864, 868] → [864, 868]`, `[0, 868] → [868]`, `[0, 865, 866] → [865, 866]`. A repeat call returned `cleaned_count: 0`, confirming genuine idempotency. All 23 relationship-bearing posts (6 Case Studies, 8 Industries, 9 Services) independently re-fetched via cache-busted requests (`x-gateway-cache-status: MISS` on every read) and cross-checked against the original mapping tables in `deployment/CMS-010-Technical-Relationships/IMPLEMENTATION-GUIDE.md` — every forward and reverse value matches exactly, both directions, on all 3 pairs. **WP-08 is now fully deployed, populated, and verified clean.**
+
+---
+
+## WP-09 — Homepage Journey Validation — Execution Report
+
+### Executive Summary
+No prior WP-09 spec existed beyond its one-line name in this register. Found the actual governing document before designing any checks: `PDC-A001` (First Constitutional Amendment) establishes an authoritative **12-stage homepage narrative**, and a follow-up implementation mission (`EO-DEL002-002-Homepage-Restructure`, 2026-07-14) already corrected the ordering drift `PDC-A001` had flagged, plus left a documented **Drift Resolution Register** (D-01 through D-10) recording exactly what was fixed and what was deliberately deferred. Rather than re-derive a validation scope from scratch, used that register as the checklist: confirm no regression on what was fixed, check whether anything deferred is now actionable given WP-03–08's progress since, and check what that mission's own tooling gaps (screenshot capture) prevented it from confirming.
+
+### Section order — validated against `PDC-A001`, no regression
+Extracted the live homepage's actual rendered section sequence via DOM order (eyebrow + heading pairs, not raw JSON): Executive Trust → Commercial Challenge → Who We Help → Why IEP → Funding & Investment → Our Process (Methodology) → Engineering Capability (Services) → Featured Case Studies → Engineering Confidence (Technical Capability) → Leadership → Testimonials. Matches `PDC-A001`'s 12-stage model exactly (Call To Action, the 12th stage, confirmed separately as the final CTA section). 5 days after `EO-DEL002-002`'s restructure, no drift has crept back in.
+
+### Real finding: D-05's "Leadership hardcoded" note is stale — already resolved, not documented as such
+`EO-DEL002-002`'s Drift Resolution Register (D-05) stated Case Studies and Leadership excerpts on the homepage "remain hardcoded... deferred" as of 2026-07-14. Checked directly rather than trusting that note: the homepage's Leadership section actually contains a live `[iep_team_grid group="director"]` shortcode, and it correctly renders all 3 real directors (Andy Holgate, Dr Abhishek Asthana, Tim Griffiths) with real photos — genuinely CMS-driven, sourced from WP-03's `cspt-team-member` data. Nobody had gone back to update D-05's status after WP-03 shipped and someone (unclear exactly when) wired this shortcode in. Corrected here, same spirit as `EO-DEL002-002`'s own correction of the stale "3 H1s" finding from the mission before it.
+
+### Real finding: Case Studies section is still hardcoded — D-05 accurate here, and now actionable
+Confirmed the homepage's "Featured case studies" section has no `[iep_case_study_grid]` or similar shortcode anywhere in `_elementor_data` — the Plastic Packaging Manufacturer / Urban Brewery card content is static text, and neither card links to its own detail page (only a single "View all case studies" link at the section's end). This was correctly deferred by `EO-DEL002-002` at the time (`cspt-portfolio` had no REST access yet) — but WP-04 has since made that data fully CMS-driven and REST-accessible, with a working `[iep_case_study_grid]` shortcode ready and unused. **Not swapped in here** — same "optional, your call" discipline as every prior shortcode-into-live-page decision in this program, since it's a visible content change to an already-live homepage section, not a validation-scope action.
+
+### Real finding, still open: Hero / Executive Trust Metrics duplication (WP-01)
+Re-checked WP-01's own flagged finding from 5 days ago — still exactly as described. Hero shows Energy cost reduction 25%, CO2 emission reduction 10–40%, Wastewater cost reduction 20–80%, and Savings identified £50k–£1m+; the very next section ("Executive trust metrics") repeats all 4 numbers verbatim. Nothing has changed here since WP-01 surfaced it — still a real, unresolved content-architecture question, not re-litigated further this session (WP-01 already made the case for why it needs a decision, not a re-analysis).
+
+### Real finding: no durable rollback path exists for the 2026-07-14 homepage restructure
+`EO-DEL002-002` itself flagged this as an unconfirmed risk ("the restructure script's DB backup write did not appear in a post-deployment meta check... not re-diagnosed"). Checked directly: `_iep_homepage_restructure_backup` post meta on page 959 genuinely does not exist (`null`), and no `homepage-parsed.json` backup file was ever committed to the repository's `deployment/EO-DEL002-002-Homepage-Restructure/` package (only `README.md`, `VERIFICATION.md`, `ROLLBACK.md`, and the two PHP scripts exist there). If the M2 reorder or M4 CTA move ever needed reverting, the only path left is Elementor's own revision history, if it hasn't expired — not something to fix retroactively now (a backup taken today wouldn't represent the pre-restructure state anyway, and 5 days of further edits have layered on top since), but worth knowing this safety net doesn't exist.
+
+### Links and responsive behaviour — clean
+All 13 unique internal links on the homepage (nav, footer, in-page CTAs) resolve HTTP 200 — none broken. No horizontal overflow at mobile (375px), tablet (768px), or desktop (1280px) — matches `EO-DEL002-002`'s own verification, no regression.
+
+### Screenshot tooling — still non-functional, 3rd consecutive session to hit this
+Same failure mode `EO-DEL002-001` and `EO-DEL002-002` both recorded — `computer` (screenshot) timed out on repeated attempts across viewport changes. All verification in this report is DOM/structural, not pixel-based, consistent with those two prior reports' own disclosed limitation. Worth a manual visual QA pass whenever screenshot tooling is next confirmed working.
+
+### `[iep_related]` (WP-08) not placed anywhere — noted, not actioned
+Per `deployment/CMS-010-Technical-Relationships/repository-update.md`'s own forward-pointer to whoever scoped WP-09: relationship data (Case Study↔Industry↔Service) exists and is correct, but nothing on the live site surfaces it to a visitor yet. Not a homepage-specific gap (it would belong on Case Study/Industry/Service detail pages, not the homepage itself) — noted here for completeness, real scope is a future decision, not this WP's to make.
+
+### Repository Changes
+- This report added to `missions/WCP-001-Progress-Register.md`.
+- No live site changes made this WP — validation only, consistent with the WP's own name.
+
+### Commits
+- No git commit made yet this session — remains uncommitted pending the user's usual batching call.
+
+### Outstanding Issues
+- Case Studies section on the homepage could now go CMS-driven (WP-04 unblocked it) — implementation decision, not made here.
+- Hero/Trust Metrics duplication (WP-01) still needs a decision.
+- No durable rollback backup for the 2026-07-14 homepage restructure — informational, not actioned.
+- Screenshot tooling still non-functional — recommend a manual visual QA pass when available.
+
+### Next Work Package
+**WP-10 — Website Validation** and **WP-11 — Repository Validation** remain — no CPT dependency, Mission Control's call on which next.
+
+---
+
+## WP-10 — Website Validation — Execution Report
+
+### Executive Summary
+No prior WP-10 spec existed beyond its name. Scoped it as the site-wide counterpart to WP-09 (which covered only the homepage): crawl every real, in-nav page for broken links, confirm the site's large orphaned-demo-page inventory is genuinely inert, check basic SEO hygiene, and do a lightweight plugin/site-health pass. Found the full page inventory first rather than assuming CLAUDE.md's documented count was current — it wasn't (46 total pages live, not the ~30 CLAUDE.md describes; worth a documentation-accuracy note, not corrected here since editing CLAUDE.md wasn't asked for).
+
+### Links — clean across all real content pages
+Crawled Home (from WP-09), About, Services, Industries, Case Studies, Leadership, Testimonials, Contact, and Insights — every unique internal link across all of them (nav, footer, in-page CTAs, Case Studies' 6 detail-page links) resolves HTTP 200. Two directly-tested sample CMS detail pages (`/industry-sector/food-beverage/`, `/team-member/andy-holgate/`) also resolve 200, confirming WP-03/WP-05's individual detail pages are genuinely live, not just DB-correct.
+
+### Real finding: Industries and Leadership listing pages don't link to their own working detail pages
+Same discoverability gap WP-09 found for the homepage's Case Studies teaser, but here it's the actual dedicated listing pages a visitor reaches from primary nav. `/industries/` (971) and `/leadership/` (972) are still the original hardcoded Elementor pages — neither links to any of the real, live `/industry-sector/{slug}/` or `/team-member/{slug}/` detail pages, even though both sets of detail pages work perfectly at their direct URLs (WP-05, WP-03 v1.4). This is the exact "optional page swap" both those WPs' own `IMPLEMENTATION-GUIDE.md`s flagged as unactioned — confirmed still true, not fixed here (visible content change to a live page, same "your call" discipline as every prior shortcode swap in this program).
+
+### Real finding: ~30 orphaned demo pages confirmed genuinely unlinked
+Cross-referenced every link gathered from all 8 real pages against the ~30 published-but-not-in-nav pages (Homepage 1–8, About Us 1–6, Blog Classic/Grid View, Project Style 1/2, Services – Old, Our Team, FAQ, Our History, Contact Us – Old, Shop/Cart/Checkout/My account, etc.) — none of the orphaned pages appear in any real page's link set. They're genuinely dead weight (publicly reachable by direct URL, indexable, but not part of the visitor journey), matching `CLAUDE.md`'s existing characterization, though its stated count (30) is now stale — 46 pages actually exist. Not actioned (unpublishing ~30 pages is a real content decision, not a validation-scope action) — flagged for a future cleanup mission if wanted.
+
+### Real finding, more significant: 13 junk demo blog posts remain published, "Insights" is a self-documented placeholder
+The "Insights" nav item (page 983) reads as broken at first glance — nearly empty, no article list — but it's actually an intentional placeholder: its own live copy states "🔴 Articles coming soon. This page will list published Insights — configure a post grid here... or set this as the Posts page once real articles replace the demo content." Same honest "coming soon" pattern as the original Resources page before WP-07. **The real problem is upstream of that placeholder**: `wp_get_site_settings` confirms `page_for_posts: 0` (unset) — `CLAUDE.md`'s documented "Posts page: ID 14" is stale/wrong; page 14 ("Industry News") is actually a draft, not the configured posts page, not live at all. Meanwhile `wp_list_posts` shows **13 published Envato Lorem-Ipsum demo blog posts** (fake solar/HVAC/food-industry content, mismatched to IEP's actual business — one literally titled "Brisket Lebrekas Alcatra Ground Round Sauage") sitting live at their own individual URLs, unlinked from any real page but publicly indexable — and confirmed, incidentally, to leak into at least one "Recent Posts" sidebar widget elsewhere on the site (observed earlier this session during unrelated verification work). Not unpublished here — bulk-moving 13 posts to draft is a real content decision worth flagging and confirming, not something to do silently mid-validation, but worth prioritizing given it's live junk content on a real client domain, not just an inert orphaned page.
+
+### Minor finding: a stray generic LinkedIn link
+The Contact page's link set includes both `https://uk.linkedin.com/company/iepltd` (the correct company page, used everywhere else on the site) and a bare `https://www.linkedin.com/` (LinkedIn's own homepage) — likely a default/unconfigured social-icon widget specific to that page's template variant. Low severity, noted not fixed.
+
+### SEO: meta-description gap is sitewide, not just historical
+`EO-DEL002-002` added a meta description to the homepage only (M6), explicitly because no SEO plugin exists on this site. Confirmed via direct fetch of all 10 real pages' raw HTML: only the homepage has a `<meta name="description">` tag — the other 9 (About, Services, Industries, Case Studies, Leadership, Testimonials, Insights, Contact, Resources) have none. Page `<title>` tags are all sane and correctly formatted (`{Page} – Industrial Energy Pioneers Limited`) across every real page — no broken/generic titles found.
+
+### Site health: plugin list mostly clean, a few low-priority items
+`wp_list_plugins` (30 total) shows no obviously malicious or broken plugins. A few real, low-priority findings: **Akismet (spam protection) is inactive** while Contact Form 7 is active and presumably collecting public submissions — a plausible real gap, not confirmed as actually needed (Sucuri may cover some of this). Three inactive-but-installed redundant plugins add unnecessary surface area without providing value: free "Advanced Custom Fields" (superseded entirely by the active ACF PRO), Gravity Forms (Contact Form 7 is the one actually in use), and CoBlocks (unused Gutenberg blocks). None of these were toggled — plugin activation state changes affect site behaviour broadly and weren't asked for. `CLAUDE.md`'s "Other active plugins of note" list is incomplete against the live list (e.g. Ultimate Addons for Elementor — which WP-06 already found owns `cspt-testimonial` — and Clear Cache For Me, directly relevant to this engagement's own cache-purge workflow, aren't mentioned there) — noted for documentation accuracy, not edited without being asked.
+
+### Repository Changes
+- This report added to `missions/WCP-001-Progress-Register.md`.
+- No live site changes made this WP — validation only, consistent with the WP's own name and WP-09's precedent.
+
+### Commits
+- No git commit made yet this session — remains uncommitted pending the user's usual batching call.
+
+### Outstanding Issues
+- Industries and Leadership listing pages could link to their real detail pages — implementation decision, not made here.
+- 13 junk demo blog posts live and indexable — worth a decision on whether to move them to draft (same pattern as every prior demo-content cleanup in this program), given it's live content on the production domain, not just an inert page.
+- ~30 orphaned demo pages confirmed harmless but still live — candidate for a future cleanup mission, not urgent.
+- Sitewide meta-description gap — would need either a Code-Snippet-based per-page description mechanism (same pattern as the homepage's) or an actual SEO plugin, a real architecture decision.
+- `CLAUDE.md` page count and plugin list are stale — flagged, not edited (wasn't asked to update it).
+
+### Next Work Package
+**WP-11 — Repository Validation** is the last remaining Work Package — no CPT dependency.
+
+---
+
+## WP-11 — Repository Validation — Execution Report
+
+### Executive Summary
+Last remaining Work Package. Scoped as an internal-consistency audit of the governance repository itself, distinct from WP-09/10's live-site focus: deployment package structural completeness, cross-reference integrity in the core governing documents, and whether `POA-META-001`'s registry (established specifically to prevent silent drift in the governance-document family) is actually being kept current. Found two real issues, one of them significant enough to affect how a future session — human or AI — orients itself in this repository.
+
+### Deployment package completeness — consistent, one structural outlier
+All 9 CMS-numbered packages deployed this program (`CMS-002` through `CMS-010`, excluding `005A`) carry the full standard file set: README, IMPLEMENTATION-GUIDE, VERIFICATION, ROLLBACK, CHANGELOG, `repository-update.md` (`CMS-003`/`CMS-004` lack `DECISIONS.md`, but they predate that convention — `CMS-005` was the first package to introduce it — not a defect, just an earlier era). **`CMS-005A-Service-Taxonomy` is a real structural outlier**: only `README.md`, `IMPLEMENTATION-GUIDE.md`, and `php/` exist in its deployment package — no `VERIFICATION.md`, `ROLLBACK.md`, `CHANGELOG.md`, `DECISIONS.md`, or `repository-update.md`. Nothing is actually lost — `docs/CMS-005A-Service-Taxonomy-Deployment-Report.md` independently covers verification, changelog-equivalent history, and decisions in full — but the module's own deployment package doesn't follow the same self-contained convention every other module uses, worth normalizing if `CMS-005A` is ever revisited.
+
+### `POA-META-001` registry — accurate, not stale
+Cross-checked the registry's claimed contents (`POA-GOV-001`, `POA-CASE-001`) against a live repository search for every `POA-GOV-*`/`case-law/*` file — exact match, nothing unregistered, nothing missing. The registry's own maintenance workflow (§6: register every new `POA-GOV`/`POA-CASE` document at materialization time) has evidently been followed correctly since `POA-META-001` itself was created.
+
+### Real finding: two documents both claim `id: CMS-001` — a genuine numbering collision
+`docs/CMS-001-CMS-Architecture.md` (front matter `id: CMS-001`, "CMS Architecture," `status: Placeholder`, dated 2026-07-05 — one of the original repository-materialization skeleton files, explicitly referenced as a `KNOWLEDGE-SOURCES-001` "Child" and in `README.md`'s own Read Order) and `docs/CMS-001-Production-Migration-Strategy.md` (front matter `id: CMS-001`, "Production Migration Strategy," `status: Planning Only — Not Approved for Execution`, dated 2026-07-12 — a real, substantive planning document) independently claim the identical repository ID. Neither document's own content acknowledges the other exists. Not renamed/renumbered here — deciding which one keeps `CMS-001` (or whether both get renumbered) is Mission Control's call, not a validation-scope action, especially since the CMS work that actually shipped (`CMS-002` onward) uses a different, unambiguous per-module numbering scheme that doesn't depend on resolving this collision.
+
+### Real finding, most significant: root `README.md` is severely stale
+Still dated 2026-07-05, `status: Draft`, version `0.1.0` — the repository's very first materialization output, never updated since. Its own text states **"Current Sprint: Not yet assigned"** and **"Current Mission: Not yet assigned... No content mission is active yet."** This is flatly wrong as of today: `PDC-001` has been Frozen since AQR-006, `PDC-A001` amended it, a full governance/case-law layer (`POA-GOV`/`POA-CASE`/`POA-META`) was added, and `WCP-001`/"Operation Horizon" — an 11-Work-Package program with this document as its own tracker — has been running since 2026-07-18 and is now complete. A new reader (human or AI) opening `README.md` first, exactly as its own "Read Order" section instructs, would be actively misled about the repository's actual state. Every file `README.md`'s Read Order points to (`PDC-001`, `DL-001`, `DSS-001`, `DDR-001`, `CMS-001-CMS-Architecture.md`, `SEO-001`) does exist — the collision above aside, nothing in the Read Order is broken, just badly out of date about program status. Not edited here — a full README rewrite is a real editorial decision (what to say about `WCP-001`'s completion, whether to restructure the Read Order to include the governance layer and `missions/WCP-001-Progress-Register.md`) worth Mission Control's input, not something to do silently as a validation finding.
+
+### Git status — uncommitted work remains, consistent with every prior WP this session
+`git status` confirms: `missions/WCP-001-Progress-Register.md` modified, `deployment/CMS-009-Resources/` and `deployment/CMS-010-Technical-Relationships/` untracked. Same "batch and commit later" pattern noted at the end of every WP this session — not actioned here either, per the standing rule that commits happen only when explicitly asked for.
+
+### Repository Changes
+- This report added to `missions/WCP-001-Progress-Register.md`.
+- No other repository files changed this WP — validation only.
+
+### Commits
+- No git commit made yet this session.
+
+### Outstanding Issues
+- `CMS-001` ID collision needs a decision (rename one, or both).
+- Root `README.md` needs a full rewrite to reflect current repository/program state — flagged as the single most impactful documentation fix available, since it's every new reader's entry point.
+- `CMS-005A`'s deployment package is missing the standard verification/rollback/changelog/decisions files (content exists elsewhere, just not in the expected location).
+- All uncommitted work from this session (WP-07 through WP-11, ~20 files) still needs a git commit — Mission Control's call on timing, per the established pattern.
+
+---
+
+## WCP-001 — Program Complete (2026-07-19)
+
+All 11 Work Packages are now done. Summary of what shipped this program ("Operation Horizon"):
+
+- **CMS content modules deployed and populated**: Leadership (WP-03), Case Studies (WP-04), Industries (WP-05), Testimonials (WP-06) — all real client content, DB-verified.
+- **Resources (WP-07)**: infrastructure-only, by design — no real client content exists yet to populate.
+- **Technical Relationships (WP-08)**: Case Study↔Industry, Case Study↔Service, and Industry↔Service all wired and bidirectionally verified; Testimonials deliberately excluded on confidentiality grounds.
+- **Homepage (WP-01, WP-02, WP-09)**: finalized, validated against `PDC-A001`'s 12-stage constitutional model — no drift found.
+- **Website-wide validation (WP-10)** and **repository validation (WP-11)** close out the program with a clear-eyed account of what's genuinely clean versus what's a real, disclosed open item — not a claim that everything is perfect.
+
+**Open items carried forward, not silently dropped** (full detail in each WP's own report above): Hero/Trust-Metrics duplication (WP-01/09), homepage Case Studies section and the Industries/Leadership listing pages still not linked to their own CMS detail pages (WP-09/10), 13 junk demo blog posts live on production (WP-10), sitewide meta-description gap (WP-10), the `CMS-001` ID collision and stale root `README.md` (WP-11), and the entire session's work still uncommitted to git. None of these block calling the program complete — they're the honest punch list for whatever comes next.

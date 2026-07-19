@@ -1,0 +1,79 @@
+[
+  {
+    "key": "group_iep_resource_v1",
+    "title": "Resource Details",
+    "fields": [
+      {
+        "key": "field_iep_res_category",
+        "label": "Category",
+        "name": "resource_category",
+        "type": "select",
+        "instructions": "The 3 categories are fixed — taken verbatim from the existing (currently ‘Coming soon’) copy on the live Resources page (984). Do not add categories here without also updating the page's own card copy and [iep_resource_grid]'s grouping logic.",
+        "choices": {
+          "guides-whitepapers": "Guides & whitepapers",
+          "tools-calculators": "Tools & calculators",
+          "funding-briefings": "Funding briefings"
+        },
+        "default_value": "",
+        "allow_null": 0,
+        "multiple": 0,
+        "ui": 1,
+        "required": 1
+      },
+      {
+        "key": "field_iep_res_file",
+        "label": "File",
+        "name": "resource_file",
+        "type": "file",
+        "instructions": "The downloadable asset (PDF expected, but not restricted to PDF — no real asset has been provided yet to confirm format). Return format: array (needs url + filename for the download link/attribute).",
+        "return_format": "array",
+        "library": "all",
+        "required": 0
+      },
+      {
+        "key": "field_iep_res_summary",
+        "label": "Summary",
+        "name": "summary",
+        "type": "text",
+        "instructions": "One-line description of the resource, in the same voice as the existing card copy (e.g. “In-depth guidance on energy efficiency and decarbonisation.”). Do not invent placeholder summaries — leave blank until real content exists.",
+        "required": 0
+      },
+      {
+        "key": "field_iep_res_gated",
+        "label": "Gated (requires email)",
+        "name": "gated",
+        "type": "true_false",
+        "instructions": "Flags whether this resource should sit behind an email-capture gate. This field only stores the flag — no MC4WP enforcement logic is wired up by this package. CRN-001 lists newsletter/email-capture implementation as an explicitly open decision; building real gating now would mean guessing at that decision. Default off (direct download) until Mission Control confirms the gating approach.",
+        "default_value": 0,
+        "ui": 1,
+        "required": 0
+      },
+      {
+        "key": "field_iep_res_display_order",
+        "label": "Display Order",
+        "name": "display_order",
+        "type": "number",
+        "instructions": "Controls presentation order within a category in [iep_resource_grid].",
+        "required": 0
+      }
+    ],
+    "location": [
+      [
+        {
+          "param": "post_type",
+          "operator": "==",
+          "value": "cspt-resource"
+        }
+      ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "field",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "CMS-009 deployment package — field model for cspt-resource, a brand-new CPT (no legacy cspt-resource/cspt-download type exists on this site — confirmed via wp_get_post_types before building this package). Post title = resource title (e.g. “Energy Efficiency Quick-Start Guide”), matching every prior module's use of post title for the primary real-world label. Package phase only: ships with zero real resources, since no client-provided guides/whitepapers/calculators/funding content exists anywhere in the repository's reviewed sources — see DECISIONS.md. Grid/wall display only, no individual detail pages (a downloadable resource has no narrative content of its own to read on a dedicated page, same reasoning as Testimonials).",
+    "show_in_rest": 1
+  }
+]
