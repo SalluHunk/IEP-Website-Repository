@@ -594,3 +594,5 @@ All 11 Work Packages are now done. Summary of what shipped this program ("Operat
 - **Website-wide validation (WP-10)** and **repository validation (WP-11)** close out the program with a clear-eyed account of what's genuinely clean versus what's a real, disclosed open item — not a claim that everything is perfect.
 
 **Open items carried forward, not silently dropped** (full detail in each WP's own report above): Hero/Trust-Metrics duplication (WP-01/09), homepage Case Studies section and the Industries/Leadership listing pages still not linked to their own CMS detail pages (WP-09/10), 13 junk demo blog posts live on production (WP-10), sitewide meta-description gap (WP-10), the `CMS-001` ID collision and stale root `README.md` (WP-11), and the entire session's work still uncommitted to git. None of these block calling the program complete — they're the honest punch list for whatever comes next.
+
+**Consolidated completion report**: `docs/WCP-001-Operation-Horizon-Completion-Report.md` — a standalone synthesis of all 11 Work Packages for anyone orienting to this program without reading the full register above.
